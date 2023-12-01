@@ -18,9 +18,11 @@ def get_summary_statistics(data):
 summary_stats = get_summary_statistics(health)
 print(summary_stats)
 
+
 #NUMBER OF ROWS AND COLUMNS
 def get_shape(data):
     return data.shape
+
 
 # Usage
 rows, columns = get_shape(health)
@@ -142,7 +144,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error
 import pandas as pd
-'
+
 
 # Specify the columns to be one-hot encoded
 categorical_columns = ['Gender', 'Medical Condition', 'Insurance Provider', 'Blood Type']
@@ -168,26 +170,38 @@ predictions = model.predict(X_test)
 mae = mean_absolute_error(y_test, predictions)
 print(f'Mean Absolute Error: {mae}')
 
-
-
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+import seaborn as sns
 import matplotlib.pyplot as plt
 
+# Additional Metrics and Confusion Matrix
+# Convert predictions to binary (you might need to adjust the threshold)
+threshold = 15000
+binary_predictions = np.where(predictions > threshold, 1, 0)
+binary_y_test = np.where(y_test > threshold, 1, 0)
 
+# Calculate and print accuracy, precision, recall, and F1 score
+accuracy = accuracy_score(binary_y_test, binary_predictions)
+precision = precision_score(binary_y_test, binary_predictions)
+recall = recall_score(binary_y_test, binary_predictions)
+f1 = f1_score(binary_y_test, binary_predictions)
 
-# Scatter plot of predicted vs actual values
-plt.figure(figsize=(10, 6))
-plt.scatter(y_test, predictions, alpha=0.5, color='blue', label='Actual vs Predicted')
+print(f'Accuracy: {accuracy}')
+print(f'Precision: {precision}')
+print(f'Recall: {recall}')
+print(f'F1 Score: {f1}')
 
-# Plot a diagonal line for reference (perfect predictions)
-plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--', linewidth=2, label='Perfect Predictions')
+# Create confusion matrix
+conf_matrix = confusion_matrix(binary_y_test, binary_predictions)
 
-# Set plot labels and title
-plt.xlabel('Actual Values')
-plt.ylabel('Predicted Values')
-plt.title('Scatter Plot of Actual vs Predicted Values')
-
-# Show legend
-plt.legend()
-
-# Show the plot
+# Plot confusion matrix using seaborn
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', cbar=False, 
+            xticklabels=['Negative', 'Positive'], yticklabels=['Negative', 'Positive'])
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.title('Confusion Matrix')
 plt.show()
+
+
+
