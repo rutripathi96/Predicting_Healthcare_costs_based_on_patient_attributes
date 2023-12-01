@@ -1,9 +1,12 @@
 # Problem Statement: Predicting Healthcare Costs based on Patient Attributes
 
+from statistics import LinearRegression
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import train_test_split
 
 health = pd.read_csv('healthcare_dataset.csv')
 
@@ -130,4 +133,61 @@ plt.title('Relationship between Medical Condition and Billing Amount')
 
 # Show the plot
 plt.xticks(rotation=45, ha='right')  # Rotate x-axis labels for better readability
-plt.show(
+plt.show()
+
+
+# #Creating the model 
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
+import pandas as pd
+'
+
+# Specify the columns to be one-hot encoded
+categorical_columns = ['Gender', 'Medical Condition', 'Insurance Provider', 'Blood Type']
+
+# Feature selection (X) and target variable (y)
+X = health[['Age'] + categorical_columns]
+y = health['Billing Amount']
+
+# Convert categorical variables to numerical representations (one-hot encoding)
+X = pd.get_dummies(X, columns=categorical_columns, drop_first=True)
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Initialize and train the model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Make predictions on the test set
+predictions = model.predict(X_test)
+
+# Evaluate the model
+mae = mean_absolute_error(y_test, predictions)
+print(f'Mean Absolute Error: {mae}')
+
+
+
+import matplotlib.pyplot as plt
+
+
+
+# Scatter plot of predicted vs actual values
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, predictions, alpha=0.5, color='blue', label='Actual vs Predicted')
+
+# Plot a diagonal line for reference (perfect predictions)
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--', linewidth=2, label='Perfect Predictions')
+
+# Set plot labels and title
+plt.xlabel('Actual Values')
+plt.ylabel('Predicted Values')
+plt.title('Scatter Plot of Actual vs Predicted Values')
+
+# Show legend
+plt.legend()
+
+# Show the plot
+plt.show()
