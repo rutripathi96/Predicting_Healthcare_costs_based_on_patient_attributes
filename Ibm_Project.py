@@ -130,7 +130,4 @@ plt.title('Relationship between Medical Condition and Billing Amount')
 
 # Show the plot
 plt.xticks(rotation=45, ha='right')  # Rotate x-axis labels for better readability
-plt.show()
-
-
-#Creating the model 
+plt.show(
