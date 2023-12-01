@@ -8,8 +8,8 @@ import seaborn as sns
 health = pd.read_csv('healthcare_dataset.csv')
 
 #SUMMARY STATISTICS 
-def get_summary_statistics(data):
-    return data.describe()
+def get_summary_statistics(health):
+    return health.describe()
 
 # Usage
 summary_stats = get_summary_statistics(health)
